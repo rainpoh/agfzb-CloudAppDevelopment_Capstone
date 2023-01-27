@@ -19,16 +19,30 @@
     <!--Add a dealer table here -->
     {% if dealer_list %}
         <div class="container">
-            <div class="card-deck">
-                {% for dealer in dealer_list %}
-                <div class="card" style="width: 36rem;">
-                    <!-- to populate the details later -->
-                    <div class="card-body bg-light">
-                        <h5 class="card-title">{{ dealer.name }}</h5>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+            <table class="table" id="table" data-filter-control="true">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Dealer Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Zip</th>
+                        <th data-field="state" data-filter-control="select">State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dealer in dealer_list %}
+                    <tr>
+                        <td>{{dealer}}{{dealer.id}}</td>
+                        <td><a href="#">{{dealer.full_name}}</a></td>
+                        <td>{{dealer.city}}</td>
+                        <td>{{dealer.address}}</td>
+                        <td>{{dealer.zip}}</td>
+                        <td>{{dealer.st}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     {% else %}
         <p>No dealers are available.</p>

@@ -10,6 +10,9 @@ from datetime import datetime
 import logging
 import json
 
+from .models import CarModel
+from .restapis import get_dealers_from_cf
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -83,7 +86,25 @@ def get_dealerships(request):
         "dealer_list": []
     }
     if request.method == "GET":
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-dealership"
+         # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        context = {
+            "dealer_list": dealer_names
+        }
         return render(request, 'djangoapp/index.html', context)
+
+# def get_dealerships(request):
+#     if request.method == "GET":
+#         url = "your-cloud-function-domain/dealerships/dealer-get"
+#         # Get dealers from the URL
+#         dealerships = get_dealers_from_cf(url)
+#         # Concat all dealer's short name
+#         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+#         # Return a list of dealer short name
+#         return HttpResponse(dealer_names)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
