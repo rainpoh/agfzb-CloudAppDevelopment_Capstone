@@ -124,7 +124,7 @@ def add_review(request, dealer_id):
         # Get dealers from the URL
         context = {
             "cars": CarModel.objects.all(),
-            "dealer": get_dealers_from_cf(url)[0],
+            "dealer": get_dealer_by_id(url, dealer_id)[0],
         }
         print(context)
         return render(request, 'djangoapp/add_review.html', context)
@@ -143,6 +143,6 @@ def add_review(request, dealer_id):
             review["car_model"] = car.name
             review["car_year"]= car.year.strftime("%Y")
         json_payload = {"review": review}
-        URL = 'https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-review'
+        URL = 'https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/post-review'
         post_request(URL, json_payload, dealerId=dealer_id)
     return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
