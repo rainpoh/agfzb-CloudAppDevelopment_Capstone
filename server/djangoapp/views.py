@@ -11,7 +11,7 @@ import logging
 import json
 
 from .models import CarModel
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
+from .restapis import get_dealers_from_cf, get_dealer_by_id, get_dealer_reviews_from_cf, post_request
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -86,10 +86,8 @@ def get_dealerships(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-dealership"
          # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         context = {
-            "dealer_list": dealer_names
+            "dealerships": dealerships,
         }
         return render(request, 'djangoapp/index.html', context)
 
@@ -108,12 +106,12 @@ def get_dealerships(request):
 # def get_dealer_details(request, dealer_id):
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
-        url_ds = f"https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-dealership?dealerId={dealer_id}"
-        url_r = f"https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-review?dealerId={dealer_id}"
+        url_dealership = f"https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-dealership?dealerId={dealer_id}"
+        url_review = f"https://us-south.functions.appdomain.cloud/api/v1/web/99b2deb1-937e-4aa4-a2b8-ed589839f2f0/dealership/get-review?dealerId={dealer_id}"
         # Get dealers from the URL
         context = {
-            "dealer": get_dealers_from_cf(url_ds)[0],
-            "reviews": get_dealer_reviews_from_cf(url_r, dealer_id),
+            "dealer": get_dealer_by_id(url_dealership, dealer_id)[0],
+            "reviews": get_dealer_reviews_from_cf(url_review, dealer_id),
         }
         return render(request, 'djangoapp/dealer_details.html', context)
 

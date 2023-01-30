@@ -7,12 +7,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
-    <body>
+<body>
 
-    <!--Add a nav bar here -->
+     <!--Add a nav bar here -->
+     {% include 'nav.html' %}
 
     <!-- Add reviews as cards -->
-
-    </body>
+    <div class="container">
+        <h1>{{dealer.full_name}}</h1>
+        <div class="card-columns">
+            {% for review in reviews %}
+                <div class="card">
+                    <img src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" class="card-img-left">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
+                        <h5 class="card-title">{{ review.car_year }}</h5>
+                        <p class="card-text">{{ review.review }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
 
 </html>
